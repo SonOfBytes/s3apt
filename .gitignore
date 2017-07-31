@@ -1,0 +1,5 @@
+Dockerfile
+/local
+/release
+/vendor
+debian-package/usr/lib/apt/methods/s3

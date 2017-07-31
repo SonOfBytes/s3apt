@@ -1,0 +1,10 @@
+Package: apt-method-s3
+Architecture: all
+Maintainer: SonOfBytes
+Depends: ca-certificates
+Priority: optional
+Version: VERSION
+Description: APT transport method for S3
+ Written in Golang this uses the official AWS SDK for Go.
+ .
+ Github: https://github.com/SonOfBytes/s3apt

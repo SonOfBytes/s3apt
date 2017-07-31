@@ -1,0 +1,61 @@
+language: go
+go:
+- 1.8
+install: true
+
+cache:
+  directories:
+    - $GOPATH/pkg
+
+script:
+- make
+- make debian
+deploy:
+  - provider: releases
+    skip_cleanup: true
+    api_key:
+      secure: qX2/uD9Z7RrT31mX3PC5t7ed0CnP8Rp1oOYp6gAyg+tQoQmUwZ9sijuzwi9WvIHZjGoJVXMm9gHa8CLM++LlRnEHOi1dyFC7ezw1YEHHcrbnGdYQUy619CcdVRdfmvO5lirfJBCXHa5CQ26hNJl23IlStZwLpIaz6MIBsX2nMzILJbfPRJsVMT6UHaDhk7C1Q+WherVqSverR2F5nr5t6Z+ibS0xy6Kxqrj+oA4EoeirV/TI33NTwCnaTlg5fBqeaWFLfxMWcW3ArUcrwUCF4fCjdTzMFTaeyqX9d/0xYxMtycmB6d8JTWcd8D3fA7dzxGsJ5zhl2h7xPucszB1bysizyX91CThBeWGKeBVTUD4HpLuByfpKFidGzKGgAJzuk8A6ov6Hl6uLalLwE4mglt4algeJ7shQWm8G6pU8GZ2SnyESOJuVzuFbOGyv40i1Ct3VsodpWzmbHDP99BkM0L4YjGijTiLXPrFX3egc4NuLg5fZl6N/zJJ+1EMaLS3nQpYVF8grCC4/+oRWgVn5eFbCJwP65O6ZPBDI/5sUCiRQTh/qrMSfUOmdj+KPaFWU/BMSSHWlUvAKOOHHEqOvigtAcVSh/geXKjHDiTfrrea3qls5kFxfbVSK/NLbzkeNionp3Uqo9E1yprIrxM7B+ie2ozKz1JYA5im6s+txtfc=
+    file:
+    - release/s3-linux-amd64
+    - release/s3-darwin-amd64
+    - release/apt-method-s3.deb
+    - release/Packages.gz
+    on:
+      repo: SonOfBytes/s3apt
+      tags: true
+  - provider: s3
+    skip_cleanup: true
+    access_key_id: AKIAJZYSHIVMG2FUWKCQ
+    secret_access_key:
+      secure: gBkTFL8B+26uuoDUQ/cPVubfJMzvL7vivdtFX48IT1mZ6n4SPOZbyfT9UfuikJgsfYu+0YmklaZArYVk/n56FgXvbeme6zr2O7Sk/eALCVIDfrGOUKOnL4jhZcvxhIEaadsdvzx5T0zLsfRcnbOOBvob/KYwT1uOrRF4Bd2C4YCG/a5gFyBOVfjF3IIyIROG74429LT9B7EHjWKAzMYRPLjDwyW7oV4riSWwkMJfoZHybUq4Nk01D17t7hATUxVVXlMyvjCyNJzq9lapCUeFpPT2E3xyBPKunAVkkhTz4Cc3HESx47NZF4L7DgJPuNYOn2dfWtbJkotjgZp9BPh3nf3v1Sz/q+T9pcyyQHUDtK4Jn3TFIS8eo/FkvU96GMTlk9rWRjd92s62Dqp4Onyo9gntUJIfs6FY5wlP3zs5faJo1rhLDy4XWLd4LJWV3isx4oOnZmotzWhQE8YmBgP0xVu+R5Aa32mXU5xT+yPci8/3TPP8eRC8V5tMt17Sb/ESon6f5x0DOIzw92O0NVF7UTNZBOdbIBpzaV6HT9PVFYSWejW9WnlL+PpsmMKl+X0zas/ZQ4N/eYJPj21u35tIOwb3NS6h8k1fqih/+m8JEL7lFEKS7qrA76scGQnGNrWRWCpuuL7v1VC6CBWTP8C2Swx6CFfTykVVx6KLFGtDXcQ=
+    bucket: "s3apt-eu-west-1"
+    acl: public_read
+    region: "eu-west-1"
+    local_dir: release
+    on:
+      repo: SonOfBytes/s3apt
+      tags: true
+  - provider: s3
+    skip_cleanup: true
+    access_key_id: AKIAJZYSHIVMG2FUWKCQ
+    secret_access_key:
+      secure: gBkTFL8B+26uuoDUQ/cPVubfJMzvL7vivdtFX48IT1mZ6n4SPOZbyfT9UfuikJgsfYu+0YmklaZArYVk/n56FgXvbeme6zr2O7Sk/eALCVIDfrGOUKOnL4jhZcvxhIEaadsdvzx5T0zLsfRcnbOOBvob/KYwT1uOrRF4Bd2C4YCG/a5gFyBOVfjF3IIyIROG74429LT9B7EHjWKAzMYRPLjDwyW7oV4riSWwkMJfoZHybUq4Nk01D17t7hATUxVVXlMyvjCyNJzq9lapCUeFpPT2E3xyBPKunAVkkhTz4Cc3HESx47NZF4L7DgJPuNYOn2dfWtbJkotjgZp9BPh3nf3v1Sz/q+T9pcyyQHUDtK4Jn3TFIS8eo/FkvU96GMTlk9rWRjd92s62Dqp4Onyo9gntUJIfs6FY5wlP3zs5faJo1rhLDy4XWLd4LJWV3isx4oOnZmotzWhQE8YmBgP0xVu+R5Aa32mXU5xT+yPci8/3TPP8eRC8V5tMt17Sb/ESon6f5x0DOIzw92O0NVF7UTNZBOdbIBpzaV6HT9PVFYSWejW9WnlL+PpsmMKl+X0zas/ZQ4N/eYJPj21u35tIOwb3NS6h8k1fqih/+m8JEL7lFEKS7qrA76scGQnGNrWRWCpuuL7v1VC6CBWTP8C2Swx6CFfTykVVx6KLFGtDXcQ=
+    bucket: "s3apt-eu-west-2"
+    acl: public_read
+    region: "eu-west-2"
+    local_dir: release
+    on:
+      repo: SonOfBytes/s3apt
+      tags: true
+  - provider: s3
+    skip_cleanup: true
+    access_key_id: AKIAJZYSHIVMG2FUWKCQ
+    secret_access_key:
+      secure: gBkTFL8B+26uuoDUQ/cPVubfJMzvL7vivdtFX48IT1mZ6n4SPOZbyfT9UfuikJgsfYu+0YmklaZArYVk/n56FgXvbeme6zr2O7Sk/eALCVIDfrGOUKOnL4jhZcvxhIEaadsdvzx5T0zLsfRcnbOOBvob/KYwT1uOrRF4Bd2C4YCG/a5gFyBOVfjF3IIyIROG74429LT9B7EHjWKAzMYRPLjDwyW7oV4riSWwkMJfoZHybUq4Nk01D17t7hATUxVVXlMyvjCyNJzq9lapCUeFpPT2E3xyBPKunAVkkhTz4Cc3HESx47NZF4L7DgJPuNYOn2dfWtbJkotjgZp9BPh3nf3v1Sz/q+T9pcyyQHUDtK4Jn3TFIS8eo/FkvU96GMTlk9rWRjd92s62Dqp4Onyo9gntUJIfs6FY5wlP3zs5faJo1rhLDy4XWLd4LJWV3isx4oOnZmotzWhQE8YmBgP0xVu+R5Aa32mXU5xT+yPci8/3TPP8eRC8V5tMt17Sb/ESon6f5x0DOIzw92O0NVF7UTNZBOdbIBpzaV6HT9PVFYSWejW9WnlL+PpsmMKl+X0zas/ZQ4N/eYJPj21u35tIOwb3NS6h8k1fqih/+m8JEL7lFEKS7qrA76scGQnGNrWRWCpuuL7v1VC6CBWTP8C2Swx6CFfTykVVx6KLFGtDXcQ=
+    bucket: "s3apt-eu-central-1"
+    acl: public_read
+    region: "eu-central-1"
+    local_dir: release
+    on:
+      repo: SonOfBytes/s3apt
+      tags: true
